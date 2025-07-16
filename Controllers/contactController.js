@@ -1,12 +1,13 @@
 const asyncHandler = require("express-async-handler")
 const Contact = require('../Models/contactModel')
+const userModel = require("../Models/userModel")
 //@desc Get all Contacts
 //@Route GET /api/contact
-//@access public
+//@access private
 
 exports.getAllContacts = asyncHandler (async (req, res, next) =>{
 
-    const contact = await Contact.find({})
+    const contact = await Contact.find({user_id: req.id})
 
     res.status(200).json({
         message:  "Success",
@@ -18,8 +19,9 @@ exports.getAllContacts = asyncHandler (async (req, res, next) =>{
 
 //@desc Create Contacts
 //@Route POST /api/contact
-//@access public
+//@access private
 exports.createContact = asyncHandler (async (req, res, next) =>{
+    console.log(req.id)
 
     const {name, email, phone} = req.body
     if(!name || !email || !phone){
@@ -30,7 +32,8 @@ exports.createContact = asyncHandler (async (req, res, next) =>{
     const contact = await Contact.create({
         name,
         email,
-        phone
+        phone,
+        user_id: req.id
     })
 
     await contact.save()
@@ -45,7 +48,7 @@ exports.createContact = asyncHandler (async (req, res, next) =>{
 
 //@desc Get Specific Contact
 //@Route GET /api/contact/:id
-//@access public
+//@access private
 exports.specificContact = asyncHandler (async (req, res, next) =>{
 
     const contact = await Contact.findById(req.params.id)
@@ -66,7 +69,7 @@ exports.specificContact = asyncHandler (async (req, res, next) =>{
 
 //@desc Update Contact
 //@Route PUT /api/contact/:id
-//@access public
+//@access private
 exports.updateContact = asyncHandler (async (req, res, next) =>{
     const contact = await Contact.findById(req.params.id)
     
@@ -97,7 +100,7 @@ exports.updateContact = asyncHandler (async (req, res, next) =>{
 
 //@desc Delete Contact
 //@Route Delete /api/contact/:id
-//@access public
+//@access private
 exports.deleteContact = asyncHandler (async (req, res, next) =>{
 
     const contact = await Contact.findById(req.params.id)

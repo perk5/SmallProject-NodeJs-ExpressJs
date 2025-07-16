@@ -36,7 +36,11 @@ const errorHandler = (error, req, res, next) => {
             stackTrace: error.stack
         })
         default:
-            console.log("No Error! All Good..!")
+            res.json({
+            title: "Failed",
+            message: error.message, 
+            stackTrace: error.stack
+        })
         break;
     }
     
